@@ -1,73 +1,26 @@
 #!/usr/bin/python3
+from math import ceil, sqrt
+from sys import argv
 
-
-import sys
-import random
-import time
-
-
-def is_prime(num, k=20):
-    '''
-    '''
-    if num == 2 or num == 3:
-        return True
-    if num < 2 or num % 2 == 0:
-        return False
-
-
-    d = num - 1
-    r = 0
-    while d % 2 == 0:
-        d //= 2
-        r += 1
-
-
-    for _ in range(k):
-        a = random.randint(2, num - 2)
-        x = pow(a, d, num)
-        if x == 1 or x == num - 1:
-            continue
-        for _ in range(r - 1):
-            x = pow(x, 2, num)
-            if x == num - 1:
-                break
-        else:
-            return False
-
-
-    return True
-
-
-if __name__ == "__main__":
-    if len(sys.argv) != 2:
-        print("Usage: rsa <file>")
-        exit()
-
-
-    input_file = sys.argv[1]
-
-
+def main():
+    argv.append("/home/ifiokekott/VSCode/ALX/RSA-Factoring-Challenge/tests/rsa-3")
     try:
-        with open(input_file, 'r') as f:
-            lines = f.readlines()
-    except FileNotFoundError:
-        print("File not found")
-        exit()
+        with open(argv[1]) as f:
+            data = f.read()
+    except (FileNotFoundError,):
+        exit(0)
+    m = int(data)
+    n = ceil(sqrt(m))
 
 
-    start_time = time.time()
+    if n % 2 == 0:
+        n -= 1
+    for i in range(n, m+1, 2):
+        c = m / i
+        if c not in [2, 5] and (c % 5 == 0 or ((c - 1) % 6 != 0 and (c+1) % 6 != 0)) or (m % i) != 0:
+            continue
+        print(f"{m}={i}*{int(c)}")
+        break
 
-
-    num = int(lines[0].strip())
-
-
-    for i in range(2, num//2):
-        if num % i == 0 and is_prime(i) and is_prime(num//i):
-            print(f"{num}={i}*{num//i}")
-            break
-
-
-        if time.time() - start_time > 5:
-            print("Time limit exceeded")
-            exit()
-
+if __name__ == '__main__':
+    main()
