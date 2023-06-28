@@ -1,0 +1,14 @@
+cmake_minimum_required(VERSION 3.0.0)
+project(RSA_Factoring_Challenge)
+
+include_directories(.)
+
+add_executable(
+    factors
+    factors.c
+    info.c
+    execute.c
+    funcs.c
+    funcs1.c
+    node.c
+)
